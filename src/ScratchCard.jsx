@@ -124,7 +124,7 @@ function ScratchCard({ onBack }) {
       
       // Play background music starting from 54 seconds
       if (audioRef.current && !musicPlaying) {
-        audioRef.current.currentTime = 54; // Start at 54 seconds
+        audioRef.current.currentTime = 55; // Start at 54 seconds
         audioRef.current.play().catch(err => {
           console.log('Audio play failed:', err);
         });
@@ -312,7 +312,7 @@ function ScratchCard({ onBack }) {
                   You are the best thing that ever happened to me.
                 </p>
                 <p className="question shimmer">
-                  Will you be my Valentine?
+                  Will you be my Valentine Shaanu?
                 </p>
                 
                 {revealStage >= 3 && (
