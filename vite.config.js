@@ -5,4 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: process.env.VERCEL ? '/' : '/Valentine-/',
+  assetsInclude: ['**/*.mpeg', '**/*.mp3', '**/*.wav', '**/*.ogg'],
 })

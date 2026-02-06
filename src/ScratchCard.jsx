@@ -1,9 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import './ScratchCard.css';
 
+// Import photos
+import photo1 from './assets/photos/photo1.jpg.jpeg';
+import photo2 from './assets/photos/photo2.jpg.jpeg';
+import photo3 from './assets/photos/photo3.jpg.jpeg';
+import photo4 from './assets/photos/photo4.jpg.jpeg';
+
+// Import audio as URL
+import backgroundMusic from './assets/audio/song.mpeg?url';
+
 function ScratchCard({ onBack }) {
   const canvasRef = useRef(null);
   const noButtonRef = useRef(null);
+  const audioRef = useRef(null);
   const [isScratching, setIsScratching] = useState(false);
   const [revealPercentage, setRevealPercentage] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -13,6 +23,10 @@ function ScratchCard({ onBack }) {
   const [showButtons, setShowButtons] = useState(false);
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
   const [yesClicked, setYesClicked] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+
+  // Photos array
+  const photos = [photo1, photo2, photo3, photo4];
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -107,6 +121,15 @@ function ScratchCard({ onBack }) {
       setRevealStage(3);
       setShowConfetti(true);
       setTimeout(() => setShowButtons(true), 1000);
+      
+      // Play background music starting from 54 seconds
+      if (audioRef.current && !musicPlaying) {
+        audioRef.current.currentTime = 54; // Start at 54 seconds
+        audioRef.current.play().catch(err => {
+          console.log('Audio play failed:', err);
+        });
+        setMusicPlaying(true);
+      }
     }
   };
 
@@ -185,9 +208,51 @@ function ScratchCard({ onBack }) {
     setShowConfetti(true);
   };
 
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (musicPlaying) {
+        audioRef.current.pause();
+        setMusicPlaying(false);
+      } else {
+        audioRef.current.play().catch(err => console.log('Audio play failed:', err));
+        setMusicPlaying(true);
+      }
+    }
+  };
+
   return (
     <div className="scratch-app">
       <button className="back-btn" onClick={onBack}>← Back</button>
+      
+      {/* Music Control Button */}
+      {revealStage >= 3 && (
+        <button className="music-btn" onClick={toggleMusic}>
+          {musicPlaying ? '🔊' : '🔇'}
+        </button>
+      )}
+      
+      {/* Audio element */}
+      <audio 
+        ref={audioRef} 
+        loop
+        preload="auto"
+      >
+        <source src={backgroundMusic} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+      
+      {/* Scrolling Background Photos - shown when revealed */}
+      {revealStage >= 3 && (
+        <div className="scrolling-background">
+          <div className="photo-scroll">
+            {[...photos, ...photos].map((photo, index) => (
+              <div key={index} className="scroll-photo">
+                <img src={photo} alt={`Background ${index + 1}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       
       {showConfetti && <Confetti />}
       <FloatingHearts />
@@ -224,32 +289,45 @@ function ScratchCard({ onBack }) {
         
         <div className={`card stage-${revealStage}`}>
           <div className="message">
-            <div className="hearts-container">
-              <div className="heart-icon pulse">💖</div>
-              <div className="heart-icon pulse delay-1">💕</div>
-              <div className="heart-icon pulse delay-2">💗</div>
-            </div>
-            
-            <div className="message-content">
-              <p className="message-text glow">
-                You are the best thing that ever happened to me.
-              </p>
-              <p className="question shimmer">
-                Will you be my Valentine?
-              </p>
-              
-              {revealStage >= 3 && (
-                <div className="reveal-message">
-                  <p className="special-text">💝 Yes, I mean YOU! 💝</p>
-                  <p className="sub-text">You make every day magical ✨</p>
+            <div className="photo-grid">
+              {photos.map((photo, index) => (
+                <div key={index} className="photo-item">
+                  <img 
+                    src={photo} 
+                    alt={`Memory ${index + 1}`}
+                  />
                 </div>
-              )}
+              ))}
             </div>
             
-            <div className="hearts-container">
-              <div className="heart-icon pulse delay-2">💓</div>
-              <div className="heart-icon pulse delay-1">💖</div>
-              <div className="heart-icon pulse">💕</div>
+            <div className="message-overlay">
+              <div className="hearts-container">
+                <div className="heart-icon pulse">💖</div>
+                <div className="heart-icon pulse delay-1">💕</div>
+                <div className="heart-icon pulse delay-2">💗</div>
+              </div>
+              
+              <div className="message-content">
+                <p className="message-text glow">
+                  You are the best thing that ever happened to me.
+                </p>
+                <p className="question shimmer">
+                  Will you be my Valentine?
+                </p>
+                
+                {revealStage >= 3 && (
+                  <div className="reveal-message">
+                    <p className="special-text">💝 Yes, I mean YOU! 💝</p>
+                    <p className="sub-text">You make every day magical ✨</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="hearts-container">
+                <div className="heart-icon pulse delay-2">💓</div>
+                <div className="heart-icon pulse delay-1">💖</div>
+                <div className="heart-icon pulse">💕</div>
+              </div>
             </div>
           </div>
           

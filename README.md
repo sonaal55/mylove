@@ -75,12 +75,20 @@ The built files will be in the `dist` folder.
 
 ## 🎯 Usage
 
-1. **Main Menu**: Choose between Scratch Card or Valentine Week
-2. **Scratch Card**: 
-   - Scratch the card to reveal the message
+1. **Add Your Photos**:
+   - Place 4 photos in `src/assets/photos/` folder
+   - Name them: `photo1.jpg`, `photo2.jpg`, `photo3.jpg`, `photo4.jpg`
+   - Recommended size: 800x800px (square or portrait)
+   - Supported formats: .jpg, .jpeg, .png, .webp
+
+2. **Main Menu**: Choose between Scratch Card or Valentine Week
+
+3. **Scratch Card**: 
+   - Scratch the card to reveal your photos and message
    - Try to click "No" (you can't! 😄)
    - Click "Yes" for a celebration
-3. **Valentine Week**:
+
+4. **Valentine Week**:
    - Scroll through the 8 days
    - Days unlock based on the date
    - Click navigation buttons to jump to specific days
